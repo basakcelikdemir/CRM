@@ -37,16 +37,15 @@ def replace_with_thresholds(dataframe, variable):
 
 
 # credentials.
-creds = {'user': 'synan_dsmlbc_group_6_admin',
-         'passwd': 'iamthedatascientist*****!',
-         'host': 'db.github.rocks',
-         'port': 3306,
-         'db': 'synan_dsmlbc_group_6'}
+creds = {'user': '*****',
+         'passwd': '*****!',
+         'host': '*****',
+         'port': *****,
+         'db': '****'}
 
 # MySQL conection string.
 connstr = 'mysql+mysqlconnector://{user}:{passwd}@{host}:{port}/{db}'
 conn = create_engine(connstr.format(**creds))
-
 
 retail_mysql_df = pd.read_sql_query("select * from online_retail_2010_2011", conn)
 
@@ -324,21 +323,3 @@ tam olarak kar zarar ne kadar olur marka için bilemiyorum fakat böylelikle gü
 
 """
 
-
-#################################################Görev 4 ############################################
-"""
-Veri tabanına kayıt gönderme
-
-§ Aşağıdaki değişkenlerden oluşacak final tablosunu veri tabanına gönderiniz.
-§ tablonun adını isim_soyisim şeklinde oluşturunuz.
-§ Tablo ismi ilgili fonksiyonda "name" bölümüne girilmelidir.
-
-
-Customer ID | recency | T | frequency | monetary | expected_purc_1_week |
-expected_purc_1_month | expected_average_profit clv | scaled_clv | segment
-
-"""
-
-cltv_final["Customer ID"] = cltv_final["Customer ID"].astype(int)
-
-cltv_final.to_sql(name='Basak_Celikdemir', con=conn, if_exists='replace', index=False)
