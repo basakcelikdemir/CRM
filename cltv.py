@@ -38,7 +38,7 @@ def replace_with_thresholds(dataframe, variable):
 
 # credentials.
 creds = {'user': '*****',
-         'passwd': '*****!',
+         'passwd': '*****',
          'host': '*****',
          'port': *****,
          'db': '****'}
