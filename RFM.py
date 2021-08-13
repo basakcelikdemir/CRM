@@ -6,7 +6,6 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 pd.set_option('display.float_format', lambda x: '%.5f' % x)
 
-#1)Online Retail II excelindeki 2010-2011 verisini okuyunuz. Oluşturduğunuz dataframe’in kopyasını oluşturunuz
 df_ = pd.read_excel("Dersler/HAFTA3/Ders Notları/online_retail_II.xlsx", sheet_name="Year 2010-2011")
 df = df_.copy()
 df.head(10)
@@ -28,17 +27,16 @@ df.shape
 # Country: Ülke ismi. Müşterinin yaşadığı ülke.
 
 
-#2)Veri setinin betimsel istatistiklerini inceleyiniz
+#2)Veri setinin betimsel istatistikleri
 df.info()
 df.head()
 df.describe()
 
-#3) Veri setinde eksik gözlem var mı? Varsa hangi değişkende kaç tane eksik gözlem vardır?
 
 df.shape
 df.isnull().sum()
 
-#4)Eksik gözlemleri veri setinden çıkartınız. Çıkarma işleminde ‘inplace=True’ parametresini kullanınız.
+#Eksik gözlemler
 
 df.dropna(inplace=True)
 df.shape
@@ -47,37 +45,24 @@ df.shape
 df["StockCode"].nunique()
 
 
-#6)Hangi üründen kaçar tane vardır?
+#6)Hangi üründen kaçar tane var
 
 df["StockCode"].value_counts().head(10)
 
-#6) En çok sipariş edilen 5 ürünü çoktan aza doğru sıralayınız.
+#6) En çok sipariş edilen 5 ürünü çoktan aza doğru 
 
 df["Quantity"].sort_values(ascending=False).head()
 
-#7)8. Faturalardaki ‘C’ iptal edilen işlemleri göstermektedir. İptal edilen işlemleri veri setinden çıkartınız.
+#7)8. Faturalardaki ‘C’ iptal edilen işlemleri göstermektedir. İptal edilen işlemleri veri setinden çıkartma
 
 df = df[~df["Invoice"].str.contains("C", na=False)]
 df.shape
 
-#9)Fatura başına elde edilen toplam kazancı ifade eden ‘TotalPrice’ adında bir değişken oluşturunuz
+#9)Fatura başına elde edilen toplam kazancı ifade eden ‘TotalPrice’ adında bir değişken
 
 df["TotalPrice"] = df["Quantity"] * df["Price"]
 df.head()
 
-######################################GOREV 2############################
-"""
-RFM metriklerinin hesaplanması:
-
-Recency, Frequency ve Monetary tanımlarını yapınız.
-> Müşteri özelinde Recency, Frequency ve Monetary metriklerini groupby, agg ve lambda ile
-hesaplayınız.
-> Hesapladığınız metrikleri rfm isimli bir değişkene atayınız.
-> Oluşturduğunuz metriklerin isimlerini recency, frequency ve monetary olarak değiştiriniz
-
-Not 1: recency değeri için bugünün tarihini (2011, 12, 11) olarak kabul ediniz.
-Not 2: rfm dataframe’ini oluşturduktan sonra veri setini "monetary>0" olacak şekilde filtreleyiniz.
-"""
 # Recency (yenilik): Müşterinin son satın almasından bugüne kadar geçen süre
 # Frequency (Sıklık): Toplam satın alma sayısı.
 # Monetary (Parasal Değer): Müşterinin yaptığı toplam harcama.
@@ -97,19 +82,7 @@ rfm.describe().T
 
 rfm = rfm[rfm["monetary"] > 0]
 
-######################################GOREV 3############################
-"""
-RFM skorlarının oluşturulması ve tek bir değişkene çevrilmesi
 
-> Recency, Frequency ve Monetary metriklerini qcut yardımı ile 1-5 arasında skorlara çeviriniz.
-> Bu skorları recency_score, frequency_score ve monetary_score olarak kaydediniz.
-> Oluşan 3 farklı değişkenin değerini tek bir değişken olarak ifade ediniz ve RFM_SCORE olarak kaydediniz. 
-
-Örneğin;
-Ayrı ayrı değişkenlerde sırasıyla 5, 2, 1 olan recency_score, frequency_score ve monetary_score skorlarını
-RFM_SCORE değişkeni isimlendirmesi ile 521 olarak oluşturunuz
-
-"""
 #Müşterinin son satın almasından bugüne kadar geçen süre.farkı en büyük olan 1'i en küçük olan 5'i ifade eder
 rfm["recency_score"] = pd.qcut(rfm['recency'], 5, labels=[5, 4, 3, 2, 1])
 
@@ -124,16 +97,6 @@ rfm["RFM_SCORE"] = (rfm['recency_score'].astype(str) +
                     rfm['frequency_score'].astype(str))
 rfm.head()
 
-######################################GOREV 4############################
-"""
-RFM skorlarının segment olarak tanımlanması
-
-> Oluşturulan RFM skorların daha açıklanabilir olması için segment tanımlamaları
-yapınız.
-
-> seg_map yardımı ile skorları segmentlere çeviriniz.
-
-"""
 
 seg_map = {
     r'[1-2][1-2]': 'hibernating',
@@ -151,14 +114,8 @@ seg_map = {
 rfm['segment'] = rfm['RFM_SCORE'].replace(seg_map, regex=True) # birleştirilen skorlar seg_map ile değiştirildi
 rfm.head(15)
 
-######################################GOREV 5############################
-"""
-Aksiyon zamanı!
 
-> > Önemli bulduğunuz 3 segmenti seçiniz. Bu üç segmenti;
->Hem aksiyon kararları açısından,
->Hem de segmentlerin yapısı açısından (ortalama RFM değerleri) yorumlayınız.
-"""
+# Aksiyon zamanı!
 
 rfm[["segment", "recency", "frequency", "monetary"]].groupby("segment").agg(["mean"])
 
@@ -168,8 +125,6 @@ Risk,can't loose ve need attention'a yatırımlar yapıp çeşitli kampanyalarla
 bu üç segment recency bakımından today date'e  en uzaklardan 
 oldukları için bir kampanyayla  kapsanmaya çalışılabilir.
 """
-
-# >>"Loyal Customers" sınıfına ait customer ID'leri seçerek excel çıktısını alınız.
 
 new_df = pd.DataFrame()
 new_df["loyal_customers"] = rfm[rfm["segment"] == "loyal_customers"].index
