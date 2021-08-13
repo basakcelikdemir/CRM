@@ -36,18 +36,7 @@ def replace_with_thresholds(dataframe, variable):
 
 
 
-# credentials.
-creds = {'user': '*****',
-         'passwd': '*****',
-         'host': '*****',
-         'port': *****,
-         'db': '****'}
 
-# MySQL conection string.
-connstr = 'mysql+mysqlconnector://{user}:{passwd}@{host}:{port}/{db}'
-conn = create_engine(connstr.format(**creds))
-
-retail_mysql_df = pd.read_sql_query("select * from online_retail_2010_2011", conn)
 
 df = retail_mysql_df.copy()
 
