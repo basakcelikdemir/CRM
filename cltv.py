@@ -37,11 +37,11 @@ def replace_with_thresholds(dataframe, variable):
 
 
 # credentials.
-creds = {'user': 'synan_dsmlbc_group_6_admin',
-         'passwd': 'iamthedatascientist*****!',
-         'host': 'db.github.rocks',
-         'port': 3306,
-         'db': 'synan_dsmlbc_group_6'}
+creds = {'user': '****',
+         'passwd': '****',
+         'host': '***',
+         'port': ***,
+         'db': '****'}
 
 # MySQL conection string.
 connstr = 'mysql+mysqlconnector://{user}:{passwd}@{host}:{port}/{db}'
@@ -67,7 +67,7 @@ cltv prediction için ay bölümüne 6 giriniz
 
 
 df.describe().T
-df.dropna(inplace=True) #eksik gözlemler silindir
+df.dropna(inplace=True) #eksik gözlemler silindi
 df = df[~df["Invoice"].str.contains("C", na=False)] #iade siparişler dışındakiler seçilip atandı
 df = df[df["Quantity"] > 0] #hiç ödeme yapmamışlar çıkarıldı
 
